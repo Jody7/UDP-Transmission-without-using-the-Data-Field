@@ -18,11 +18,14 @@ public class Client {
 
         BufferedReader inFromUser =          new BufferedReader(new InputStreamReader(System.in));
         String eax = inFromUser.readLine();
+        //creates br and gets info from inputstream
 
         eax = EncryptUtils.xorMessage(eax, key );
         eax = EncryptUtils.base64encode(eax);
-
+        //grab those values
+        
         String msg = stringToBinary(eax,false);
+        
 
         String destination = "127.0.0.1";
         System.out.println("Transmitting Data");
@@ -30,19 +33,23 @@ public class Client {
 
         for (int i = 0; i < msg.length(); i++){
             char ch = msg.charAt(i);
-
+            //loop through string. i is used to get the current char it is at
 
             if(ch=='0'){
                 send0(destination);
+                //sends packet 0 if the binary is 0
             }
             else if (ch=='1'){
                 send1(destination);
+                //sends packet 1 if the binary is 1
             }
             else{
             System.out.println("Error Transmitting, Char = " + ch);
+            //somthing went wrong :(
             }
         }
         sendEnd(destination);
+        //sends ending header ( forgot term )
         System.out.println("Sent Encrypted String: " + eax+ "with key: " + key);
 
 
@@ -51,12 +58,15 @@ public class Client {
     public static void send0(String dest) throws Exception{
         DatagramSocket clientSocket = new DatagramSocket();
         InetAddress IPAddress = InetAddress.getByName(dest);
+        //new datagram object and set up, could of just re-used the object instead of initiating :l
         byte[] sendData = new byte[0];
+        //byte array with nothing in it, lol
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 7700);
         clientSocket.send(sendPacket);
 
         System.out.println("Sent Packet 0");
         clientSocket.close();
+        //lets not leak memory now shal we
         Thread.sleep(10);
     }
     public static void send1(String dest) throws Exception{
