@@ -4,11 +4,12 @@ import java.io.*;
 import java.net.*;
 
 class Handler extends Thread{
+    //extends thread for multi-threading purposes
 
     //KEY SET HERE
     String key = "a4655a86357b63c3d690c84142612c8f";
 
-
+    
     public void run(){
 
         while (true){
@@ -33,10 +34,12 @@ class Handler extends Thread{
 }
 
 class Server1 extends Thread{
+    //more multi-threading!!!
     public void run(){
         DatagramSocket serverSocket1 = null;
         try {
             serverSocket1 = new DatagramSocket(7701);
+            
         } catch(Exception e){}
         byte[] receiveData1 = new byte[0];
 
@@ -49,6 +52,7 @@ class Server1 extends Thread{
             DatagramPacket receivePacket1 = new DatagramPacket(receiveData1, receiveData1.length);
             try {
                 serverSocket1.receive(receivePacket1);
+                //when receive thread unlocks and continues on its way
 
                 //SoundUtils.tone(500, 10, 0.1);
                 System.out.println("1");
@@ -84,7 +88,7 @@ class ServerStop extends Thread {
     }
 }
 public class Server{
-
+    //main thread
     public static Server1 t = null;
     public static ServerStop n = null;
     public static Handler f = null;
@@ -111,7 +115,10 @@ public class Server{
         n.start();
         f = new Handler();
         f.start();
+        //start ALL the threads!!!
+        
         while(on){
+            
             DatagramPacket receivePacket0 = new DatagramPacket(receiveData0, receiveData0.length);
 
             serverSocket0.receive(receivePacket0);
